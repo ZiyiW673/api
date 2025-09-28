@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>API File Reader</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/milligram/1.4.1/milligram.min.css"
+      integrity="sha512-EOs6d0aIIQw8Eoroxu48y32CEcTrp2oynZMhUlCT3VkOITkkpFmS6r30YIOCwRvDDDeWGPAHDLcIbwYyX3E27Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <style>
+      body {
+        margin: 2rem;
+        background: #f8f9fb;
+      }
+
+      .container {
+        max-width: 960px;
+        margin: 0 auto;
+      }
+
+      textarea {
+        min-height: 300px;
+        font-family: "Fira Code", monospace;
+      }
+
+      .metadata {
+        font-size: 0.9rem;
+        color: #555;
+      }
+
+      .error {
+        background: #fbe3e4;
+        color: #8a1f11;
+        padding: 1rem;
+        border-radius: 4px;
+      }
+    </style>
+  </head>
+  <body>
+    <main class="container">
+      <h1>API File Reader</h1>
+      <p>
+        Provide an API endpoint and key to retrieve a file. The key will be sent
+        using the specified header (defaults to
+        <code>Authorization: Bearer &lt;key&gt;</code>).
+      </p>
+
+      <form method="post">
+        <label for="api_url">API URL</label>
+        <input
+          type="url"
+          id="api_url"
+          name="api_url"
+          placeholder="https://example.com/api/file"
+          required
+          value="{{ api_url }}"
+        />
+
+        <label for="api_key">API Key</label>
+        <input
+          type="text"
+          id="api_key"
+          name="api_key"
+          placeholder="Enter API key"
+          value="{{ api_key }}"
+        />
+
+        <label for="header_name">Header Name</label>
+        <input
+          type="text"
+          id="header_name"
+          name="header_name"
+          placeholder="Authorization"
+          value="{{ header_name }}"
+        />
+
+        <button type="submit">Fetch File</button>
+      </form>
+
+      {% if error %}
+      <div class="error">{{ error }}</div>
+      {% endif %}
+
+      {% if preview is not none or content_type %}
+      <section>
+        <h2>Result</h2>
+        <p class="metadata">
+          {% if content_type %}<strong>Content-Type:</strong> {{ content_type }}<br />{% endif %}
+          {% if content_length %}<strong>Content-Length:</strong> {{ content_length }} bytes{% endif %}
+        </p>
+
+        {% if preview %}
+        <label for="preview">Preview</label>
+        <textarea id="preview" readonly>{{ preview }}</textarea>
+        {% else %}
+        <p>No text preview available for this content type.</p>
+        {% endif %}
+      </section>
+      {% endif %}
+    </main>
+  </body>
+</html>
